@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import API from "../api/axios"; // ✅ Use your configured axios instance
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -12,7 +13,6 @@ const AuthCallback = () => {
 
   useEffect(() => {
     const token = searchParams.get("token");
-    const provider = searchParams.get("provider");
     const error = searchParams.get("error");
 
     if (error) {
@@ -22,25 +22,26 @@ const AuthCallback = () => {
     }
 
     if (token) {
-      // Fetch user profile using the token
-      fetch("/api/auth/profile", {
+      // ✅ Use API instance which points to Render backend URL
+      API.get("/auth/profile", {
         headers: { Authorization: `Bearer ${token}` },
       })
-        .then((r) => r.json())
-        .then((userData) => {
+        .then((response) => {
+          const userData = response.data;
           // Store token and user in context/localStorage
           login(userData, token);
           setStatus("✅ Signed in successfully!");
           navigate("/dashboard");
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Profile fetch error:", err);
           setStatus("❌ Failed to fetch profile.");
           setTimeout(() => navigate("/login"), 2000);
         });
     } else {
       navigate("/login");
     }
-  }, []);
+  }, [searchParams, navigate, login]);
 
   return (
     <div style={styles.container}>
