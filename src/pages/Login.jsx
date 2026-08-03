@@ -16,13 +16,13 @@ const Login = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // ── Google Login ───────────────────────────────────────────
+    // ── Google Login ───────────────────────────────────────────
   const handleGoogleLogin = () => {
     console.log("🔍 Google button clicked");
 
-    // ✅ Vite uses import.meta.env (not process.env)
-    const backendUrl =
-      import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    // ✅ Automatically derive backend URL from VITE_API_URL or fallback to localhost
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+    const backendUrl = apiUrl.replace(/\/api\/?$/, ""); // removes '/api' from the end
     const fullUrl = `${backendUrl}/api/auth/google`;
 
     console.log("🔍 Redirecting to:", fullUrl);
