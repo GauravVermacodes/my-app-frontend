@@ -14,17 +14,14 @@ const SearchResults = () => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const sortRef = useRef(null);
 
-  // ✅ NEW (Dynamic - uses your production backend)
-const BACKEND = import.meta.env.VITE_API_URL 
-  ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "") 
-  : "http://localhost:5000";
+  const BACKEND = "https://my-app-backend-5cdq.onrender.com";
+  const getUrl = (u) =>
+    !u
+      ? "https://picsum.photos/480/270"
+      : u.startsWith("http")
+      ? u
+      : `${BACKEND}${u}`;
 
-const getUrl = (u) =>
-  !u
-    ? "https://picsum.photos/480/270"
-    : u.startsWith("http")
-    ? u
-    : `${BACKEND}${u}`;
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (sortRef.current && !sortRef.current.contains(e.target)) {
