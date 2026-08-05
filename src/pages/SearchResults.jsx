@@ -14,14 +14,17 @@ const SearchResults = () => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const sortRef = useRef(null);
 
-  const BACKEND = "http://localhost:5000";
-  const getUrl = (u) =>
-    !u
-      ? "https://picsum.photos/480/270"
-      : u.startsWith("http")
-      ? u
-      : `${BACKEND}${u}`;
+  // ✅ NEW (Dynamic - uses your production backend)
+const BACKEND = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "") 
+  : "http://localhost:5000";
 
+const getUrl = (u) =>
+  !u
+    ? "https://picsum.photos/480/270"
+    : u.startsWith("http")
+    ? u
+    : `${BACKEND}${u}`;
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (sortRef.current && !sortRef.current.contains(e.target)) {
