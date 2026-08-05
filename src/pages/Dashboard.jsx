@@ -1079,7 +1079,6 @@ const rm = {
   closeBtn: {
     width: '32px',
     height: '32px',
-    border: 'none',
     background: '#faf7f0',
     borderRadius: '8px',
     fontSize: '24px',
